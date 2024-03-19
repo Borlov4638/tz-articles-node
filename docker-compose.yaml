@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+    postgres:
+        image: postgres:13.3
+        environment:
+            POSTGRES_DB: 'tz_artel'
+            POSTGRES_USER: 'root'
+            POSTGRES_PASSWORD: '12345'
+        ports:
+            - '5432:5432'
+        volumes:
+            - ./data/postgresql:/var/lib/postgresql
+
+    redis:
+        image: 'redis:alpine'
+        command: ['redis-server', '--requirepass', 'supersecret']
+        ports:
+            - '6379:6379'
+        volumes:
+            - ./data/redis:/data
+        environment:
+            REDIS_PASS: supersecret
