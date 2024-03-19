@@ -25,13 +25,9 @@ export class AuthController {
     @HttpCode(HttpStatus.CREATED)
     @Post('registration')
     async registerUser(
-        @Body() userData: UserLoginAndRegistrationDTO,
+        @Body() dto: UserLoginAndRegistrationDTO,
     ): Promise<UserDataWithoutPassword> {
-        return this.userService.createUser(
-            userData.email,
-            userData.password,
-            userData.username,
-        );
+        return this.userService.createUser(dto.email, dto.password, dto.username);
     }
 
     @UseGuards(LocalAuthGuard)
