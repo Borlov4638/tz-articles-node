@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RedisSession } from '../types/session-redis.type';
 import { RedisManagerService } from 'src/modules/redis/services/redis-manager.service';
+import { RedisSession } from '../types/session-redis.type';
 
 @Injectable()
 export class SessionService {
@@ -22,7 +22,7 @@ export class SessionService {
             userId,
         };
         const ttl = +this.configService.get<string>('JWT_REFRESH_EXP');
-        return await this.redisService.set(deviceId, session, ttl);
+        return this.redisService.set(deviceId, session, ttl);
     }
 
     async isSessionValid(deviceId: string, refreshHash: string): Promise<boolean> {

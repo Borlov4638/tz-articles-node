@@ -5,8 +5,8 @@ import {
     Injectable,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UserEntity } from '../../users/entities/user.entity';
 
+import { UserEntity } from '../../users/entities/user.entity';
 import { UserService } from '../../users/services/user.service';
 
 @Injectable()

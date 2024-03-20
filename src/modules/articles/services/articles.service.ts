@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { RedisManagerService } from '../../../modules/redis/services/redis-manager.service';
 import { GenericFilter } from '../../utils/generic-parigation-filter';
-import { ArticleEntity } from '../entities/article.entity';
 import { CreateUpdateArticleDTO } from '../dto/request/create-article.query';
 import { AllArticlesViewModel } from '../dto/response/get-all-articles.viewmodel';
-import { RedisManagerService } from 'src/modules/redis/services/redis-manager.service';
+import { ArticleEntity } from '../entities/article.entity';
 
 @Injectable()
 export class ArticlesService {
@@ -93,7 +93,8 @@ export class ArticlesService {
                 else this.articleRepo.update(id, dto).then(() => this.getOneArticle(id));
             });
 
-        //TODO: rewrite cache with updated info
+        //invalidate cache for this article
+        await this.redisService.remove(`ONE_ARTICLE/${id}`);
     }
 
     async deleteOneArticle(userId: string, id: number): Promise<void> {
@@ -105,6 +106,7 @@ export class ArticlesService {
                 else this.articleRepo.delete(id);
             });
 
-        //TODO: rewrite cache with updated info
+        //invalidate cache for this article
+        await this.redisService.remove(`ONE_ARTICLE/${id}`);
     }
 }
