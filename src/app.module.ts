@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import getConfig from './db/config';
-import { DatabaseModule } from './db/database.module';
+import getConfig from './modules/db/config/config';
+import { DatabaseModule } from './modules/db/database.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedisManagerModule } from './modules/redis/redis-manager.module';
