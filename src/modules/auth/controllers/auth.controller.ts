@@ -55,4 +55,10 @@ export class AuthController {
         });
         return res.status(200).json({ accessToken: tokens.accessToken });
     }
+
+    @UseGuards(RefreshTokenAuthGuard)
+    @Post('logout')
+    async logout(@Req() req: Request) {
+        await this.authService.logout(req.user['deviceId']);
+    }
 }

@@ -56,6 +56,10 @@ export class AuthService {
         return tokens;
     }
 
+    async logout(deviceId: string): Promise<void> {
+        await this.sessionService.deleteSession(deviceId);
+    }
+
     private async getTokens(
         userId: string,
         username: string,

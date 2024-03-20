@@ -25,6 +25,10 @@ export class SessionService {
         return this.redisService.set(deviceId, session, ttl);
     }
 
+    async deleteSession(deviceId: string): Promise<void> {
+        await this.redisService.remove(deviceId);
+    }
+
     async isSessionValid(deviceId: string, refreshHash: string): Promise<boolean> {
         try {
             const session = (await this.redisService.get(deviceId)) as RedisSession;
