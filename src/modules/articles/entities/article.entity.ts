@@ -18,7 +18,7 @@ export class ArticleEntity {
     @Column('character varying')
     description: string;
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt: string;
     @Column('uuid')
     author: string;
     @ManyToOne(() => UserEntity, (user) => user.id)
