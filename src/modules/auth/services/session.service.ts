@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RedisManagerService } from 'src/modules/redis/services/redis-manager.service';
+import { RedisManagerService } from '../../../modules/redis/services/redis-manager.service';
 import { RedisSession } from '../types/session-redis.type';
 
 @Injectable()
