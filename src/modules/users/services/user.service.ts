@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CryptoService } from '../../utils/crypto.service';
+import { CryptoService } from '../../utils/crypto/crypto.service';
 import { UserEntity } from '../entities/user.entity';
 
 export interface UserDataWithoutPassword {
