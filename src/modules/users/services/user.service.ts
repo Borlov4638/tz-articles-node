@@ -4,12 +4,7 @@ import { Repository } from 'typeorm';
 
 import { CryptoService } from '../../utils/crypto/crypto.service';
 import { UserEntity } from '../entities/user.entity';
-
-export interface UserDataWithoutPassword {
-    id: number;
-    username: string;
-    createdAt: Date;
-}
+import { UserDataWithoutPassword } from '../types/user-without-pass.type';
 
 @Injectable()
 export class UserService {
@@ -37,8 +32,8 @@ export class UserService {
         return this.userRepo.findOne({ where: { email } });
     }
 
-    async validateUser(login: string, pass: string): Promise<UserDataWithoutPassword> {
-        const user = await this.userRepo.findOne({ where: { username: login } });
+    async validateUser(email: string, pass: string): Promise<UserDataWithoutPassword> {
+        const user = await this.findUserByEmail(email);
         if (!user || !(await this.cryptoService.compareHash(pass, user.password))) {
             throw new UnauthorizedException('Invalid credentials');
         }
