@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { GenericFilter } from 'src/modules/utils/generic-parigation-filter';
+import { GenericFilter } from '../../../../modules/utils/generic-parigation-filter';
 
 enum ArticlesSortByEnum {
     id = 'id',
@@ -13,5 +13,5 @@ export class GetAllArticlesQuery extends GenericFilter {
     @IsString()
     @IsEnum(ArticlesSortByEnum)
     @IsOptional()
-    public sortBy: ArticlesSortByEnum;
+    public sortBy?: ArticlesSortByEnum;
 }
