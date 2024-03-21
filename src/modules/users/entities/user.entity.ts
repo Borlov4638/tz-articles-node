@@ -11,7 +11,7 @@ import { ArticleEntity } from '../../articles/entities/article.entity';
 @Entity()
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id: string;
     @Column('character varying', { unique: true })
     email: string;
     @Column('character varying')
@@ -19,7 +19,7 @@ export class UserEntity {
     @Column('character varying')
     password: string;
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt: string;
     @OneToMany(() => ArticleEntity, (article) => article.user)
     articles: ArticleEntity[];
 }

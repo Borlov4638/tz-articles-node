@@ -9,12 +9,13 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { UserDataWithoutPassword, UserService } from '../../users/services/user.service';
+import { UserService } from '../../users/services/user.service';
 import { UserLoginAndRegistrationDTO } from '../dto/user-registration';
 import { LocalAuthGuard } from '../guards/local-auth-guard.guard';
 import { RefreshTokenAuthGuard } from '../guards/refresh-jwt.guard';
 import { UsernameExistGuard } from '../guards/user-exists.guard';
 import { AuthService } from '../services/auth.service';
+import { UserDataWithoutPassword } from '../../../modules/users/types/user-without-pass.type';
 
 @Controller('auth')
 export class AuthController {
