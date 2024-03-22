@@ -4,11 +4,10 @@ import {
     HttpCode,
     HttpStatus,
     Post,
-    Req,
     Res,
     UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { UserService } from '../../users/services/user.service';
 import { UserLoginAndRegistrationDTO } from '../dto/user-registration.dto';
 import { LocalAuthGuard } from '../guards/local-auth-guard.guard';
@@ -16,6 +15,8 @@ import { RefreshTokenAuthGuard } from '../guards/refresh-jwt.guard';
 import { UsernameExistGuard } from '../guards/user-exists.guard';
 import { AuthService } from '../services/auth.service';
 import { UserDataWithoutPassword } from '../../../modules/users/types/user-without-pass.type';
+import { User } from 'src/decorators/get-user-from-request.decorator';
+import { UsersRefreshTokenPayload } from '../types/refresh-token-payload.type';
 
 @Controller('auth')
 export class AuthController {
@@ -32,8 +33,11 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    async loginUser(@Req() req: Request, @Res() res: Response): Promise<Response> {
-        const tokens = await this.authService.login(req.user['id'], req.user['username']);
+    async loginUser(
+        @User() user: UserDataWithoutPassword,
+        @Res() res: Response,
+    ): Promise<Response> {
+        const tokens = await this.authService.login(user.id, user.username);
 
         res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,
@@ -44,11 +48,14 @@ export class AuthController {
 
     @UseGuards(RefreshTokenAuthGuard)
     @Post('refresh')
-    async refreshToken(@Req() req: Request, @Res() res: Response): Promise<Response> {
+    async refreshToken(
+        @User() user: UsersRefreshTokenPayload,
+        @Res() res: Response,
+    ): Promise<Response> {
         const tokens = await this.authService.refresh(
-            req.user['id'],
-            req.user['username'],
-            req.user['deviceId'],
+            user.id,
+            user.username,
+            user.deviceId,
         );
         res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,
@@ -59,7 +66,7 @@ export class AuthController {
 
     @UseGuards(RefreshTokenAuthGuard)
     @Post('logout')
-    async logout(@Req() req: Request) {
-        await this.authService.logout(req.user['deviceId']);
+    async logout(@User() user: UsersRefreshTokenPayload) {
+        await this.authService.logout(user.deviceId);
     }
 }

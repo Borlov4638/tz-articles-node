@@ -3,11 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-    AuthService,
-    UsersRefreshTokenPayload,
-    UsersAccessTokenPayload,
-} from './auth.service';
+import { AuthService } from './auth.service';
 import { SessionService } from './session.service';
 
 jest.mock('uuid', () => ({

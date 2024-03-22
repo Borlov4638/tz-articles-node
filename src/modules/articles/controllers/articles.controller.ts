@@ -9,17 +9,16 @@ import {
     Post,
     Put,
     Query,
-    Req,
     UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
-
 import { AccessTokenAuthGuard } from '../../auth/guards/access-jwt.guard';
 import { CreateUpdateArticleDTO } from '../dto/create-article.query';
 import { GetAllArticlesQuery } from '../dto/get-all-articles.dto';
 import { AllArticlesViewModel } from '../response/get-all-articles.response';
 import { ArticleEntity } from '../entities/article.entity';
 import { ArticlesService } from '../services/articles.service';
+import { UsersAccessTokenPayload } from 'src/modules/auth/types/access-token-payload.type';
+import { User } from '../../../decorators/get-user-from-request.decorator';
 
 @Controller('articles')
 export class ArticlesController {
@@ -28,10 +27,10 @@ export class ArticlesController {
     @UseGuards(AccessTokenAuthGuard)
     @Post()
     async createArticle(
-        @Req() req: Request,
+        @User() user: UsersAccessTokenPayload,
         @Body() dto: CreateUpdateArticleDTO,
     ): Promise<ArticleEntity> {
-        return this.articlesService.createArticle(req.user['id'], dto);
+        return this.articlesService.createArticle(user.id, dto);
     }
 
     @Get()
@@ -52,20 +51,20 @@ export class ArticlesController {
     @Put(':id')
     @HttpCode(204)
     async updateArticle(
-        @Req() req: Request,
+        @User() user: UsersAccessTokenPayload,
         @Body() dto: CreateUpdateArticleDTO,
         @Param('id', new ParseIntPipe()) id: number,
     ): Promise<void> {
-        await this.articlesService.updateArticle(req.user['id'], id, dto);
+        await this.articlesService.updateArticle(user.id, id, dto);
     }
 
     @UseGuards(AccessTokenAuthGuard)
     @Delete(':id')
     @HttpCode(204)
     async deleteArticle(
-        @Req() req: Request,
+        @User() user: UsersAccessTokenPayload,
         @Param('id', new ParseIntPipe()) id: number,
     ): Promise<void> {
-        await this.articlesService.deleteOneArticle(req.user['id'], id);
+        await this.articlesService.deleteOneArticle(user.id, id);
     }
 }
