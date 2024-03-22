@@ -29,11 +29,15 @@
 ## Installation
 
 ```bash
-$ docker compose up -d
+$ docker-compose up -d
 ```
 
 ```bash
-$ npm install
+$ cp .env.example .env
+```
+
+```bash
+$ npm ci
 ```
 
 ## Running the app
