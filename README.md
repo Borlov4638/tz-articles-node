@@ -33,6 +33,10 @@ $ docker-compose up -d
 ```
 
 ```bash
+$ nvm use
+```
+
+```bash
 $ cp .env.example .env
 ```
 
