@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RedisManagerService } from '../../../modules/redis/services/redis-manager.service';
 import { GenericFilter } from '../../utils/generic/generic-parigation-filter';
-import { CreateUpdateArticleDTO } from '../dto/request/create-article.query';
-import { AllArticlesViewModel } from '../dto/response/get-all-articles.viewmodel';
+import { CreateUpdateArticleDTO } from '../dto/create-article.query';
+import { AllArticlesViewModel } from '../response/get-all-articles.response';
 import { ArticleEntity } from '../entities/article.entity';
 
 @Injectable()

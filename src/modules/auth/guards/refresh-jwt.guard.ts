@@ -7,9 +7,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-
-import { UsersRefreshTokenPayload } from '../services/auth.service';
 import { SessionService } from '../services/session.service';
+import { UsersRefreshTokenPayload } from '../types/refresh-token-payload.type';
 
 @Injectable()
 export class RefreshTokenAuthGuard implements CanActivate {

@@ -9,13 +9,6 @@ export class RedisManagerService {
         private readonly redisManager: Redis,
     ) {}
 
-    /**
-     * Добавить элемент в БД
-     * @param key
-     * @param value
-     * @param ttlInSeconds
-     * @returns
-     */
     async set<T>(key: string, value: T, ttlInSeconds?: number): Promise<void> {
         if (ttlInSeconds) {
             await this.redisManager.set(key, JSON.stringify(value), 'EX', ttlInSeconds);
@@ -25,11 +18,6 @@ export class RedisManagerService {
         await this.redisManager.set(key, JSON.stringify(value));
     }
 
-    /**
-     * Получить элемент из БД по ключу
-     * @param key
-     * @returns
-     */
     async get<T>(key: string): Promise<T | null> {
         const cachedResponse = await this.redisManager.get(key);
 
@@ -43,11 +31,6 @@ export class RedisManagerService {
         await this.redisManager.del(key);
     }
 
-    /**
-     * Сканировать ключи по паттерну и получить их значения
-     * @param pattern
-     * @returns
-     */
     async scanWithValues(pattern: string): Promise<Record<string, string>> {
         let cursor = '0';
         const result: Record<string, string> = {};

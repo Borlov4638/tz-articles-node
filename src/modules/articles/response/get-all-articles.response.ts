@@ -1,4 +1,4 @@
-import { ArticleEntity } from '../../entities/article.entity';
+import { ArticleEntity } from '../entities/article.entity';
 
 export class AllArticlesViewModel {
     meta: {

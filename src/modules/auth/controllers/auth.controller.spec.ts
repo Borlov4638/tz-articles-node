@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { UserService } from '../../users/services/user.service';
 import { AuthService } from '../services/auth.service';
-import { UserLoginAndRegistrationDTO } from '../dto/user-registration';
+import { UserLoginAndRegistrationDTO } from '../dto/user-registration.dto';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from '../guards/local-auth-guard.guard';
 import { RefreshTokenAuthGuard } from '../guards/refresh-jwt.guard';

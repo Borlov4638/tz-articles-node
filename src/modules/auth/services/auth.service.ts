@@ -4,21 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 
 import { SessionService } from './session.service';
-
-export type UsersRefreshTokenPayload = {
-    id: string;
-    username: string;
-    deviceId: string;
-    iat: number;
-    exp: number;
-};
-
-export type UsersAccessTokenPayload = {
-    id: string;
-    username: string;
-    iat: number;
-    exp: number;
-};
+import { TokenPair } from '../types/token-pair.type';
 
 @Injectable()
 export class AuthService {
@@ -32,23 +18,14 @@ export class AuthService {
         userId: string,
         username: string,
         deviceId: string,
-    ): Promise<{
-        accessToken: string;
-        refreshToken: string;
-    }> {
+    ): Promise<TokenPair> {
         const tokens = await this.getTokens(userId, username, deviceId);
         const refreshHash = tokens.refreshToken.split('.')[2];
         await this.sessionService.createSession(userId, deviceId, refreshHash);
         return tokens;
     }
 
-    async login(
-        userId: string,
-        username: string,
-    ): Promise<{
-        accessToken: string;
-        refreshToken: string;
-    }> {
+    async login(userId: string, username: string): Promise<TokenPair> {
         const deviceId = uuidv4();
         const tokens = await this.getTokens(userId, username, deviceId);
         const refreshHash = tokens.refreshToken.split('.')[2];
@@ -64,10 +41,7 @@ export class AuthService {
         userId: string,
         username: string,
         deviceId: string,
-    ): Promise<{
-        accessToken: string;
-        refreshToken: string;
-    }> {
+    ): Promise<TokenPair> {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 {

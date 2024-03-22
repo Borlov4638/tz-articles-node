@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ArticlesController } from './articles.controller';
 import { ArticlesService } from '../services/articles.service';
-import { GetAllArticlesQuery } from '../dto/request/get-all-articles.dto';
-import { CreateUpdateArticleDTO } from '../dto/request/create-article.query';
+import { GetAllArticlesQuery } from '../dto/get-all-articles.dto';
+import { CreateUpdateArticleDTO } from '../dto/create-article.query';
 import { Request } from 'express';
 import { AccessTokenAuthGuard } from '../../auth/guards/access-jwt.guard';
 import { of } from 'rxjs';

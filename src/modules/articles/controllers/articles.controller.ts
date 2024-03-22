@@ -15,9 +15,9 @@ import {
 import { Request } from 'express';
 
 import { AccessTokenAuthGuard } from '../../auth/guards/access-jwt.guard';
-import { CreateUpdateArticleDTO } from '../dto/request/create-article.query';
-import { GetAllArticlesQuery } from '../dto/request/get-all-articles.dto';
-import { AllArticlesViewModel } from '../dto/response/get-all-articles.viewmodel';
+import { CreateUpdateArticleDTO } from '../dto/create-article.query';
+import { GetAllArticlesQuery } from '../dto/get-all-articles.dto';
+import { AllArticlesViewModel } from '../response/get-all-articles.response';
 import { ArticleEntity } from '../entities/article.entity';
 import { ArticlesService } from '../services/articles.service';
 

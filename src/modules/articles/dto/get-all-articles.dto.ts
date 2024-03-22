@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { GenericFilter } from '../../../utils/generic/generic-parigation-filter';
+import { GenericFilter } from '../../utils/generic/generic-parigation-filter';
 
 enum ArticlesSortByEnum {
     id = 'id',
