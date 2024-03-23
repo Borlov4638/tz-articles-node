@@ -44,6 +44,10 @@ $ cp .env.example .env
 $ npm ci
 ```
 
+```bash
+$ npx typeorm-ts-node-esm migration:run -d src/modules/db/config/data-source.ts
+```
+
 ## Running the app
 
 ```bash
