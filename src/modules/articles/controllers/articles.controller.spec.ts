@@ -6,6 +6,7 @@ import { CreateUpdateArticleDTO } from '../dto/create-article.query';
 import { Request } from 'express';
 import { AccessTokenAuthGuard } from '../../auth/guards/access-jwt.guard';
 import { of } from 'rxjs';
+import { UsersAccessTokenPayload } from 'src/modules/auth/types/access-token-payload.type';
 
 describe('ArticlesController', () => {
     let controller: ArticlesController;
@@ -40,15 +41,16 @@ describe('ArticlesController', () => {
 
     describe('createArticle', () => {
         it('should call createArticle method of ArticlesService', async () => {
-            const userId = 1;
+            const userId = '1';
+            const user: UsersAccessTokenPayload = {
+                id: userId,
+                username: 'username',
+            };
             const dto: CreateUpdateArticleDTO = {
                 title: 'title',
                 description: 'description',
             };
-            await controller.createArticle(
-                { user: { id: userId } } as unknown as Request,
-                dto,
-            );
+            await controller.createArticle(user, dto);
             expect(articlesService.createArticle).toHaveBeenCalledWith(userId, dto);
         });
     });
@@ -71,30 +73,31 @@ describe('ArticlesController', () => {
 
     describe('updateArticle', () => {
         it('should call updateArticle method of ArticlesService', async () => {
-            const userId = 1;
+            const userId = '1';
             const dto: CreateUpdateArticleDTO = {
                 title: 'new title',
                 description: 'new description',
             };
+            const user: UsersAccessTokenPayload = {
+                id: userId,
+                username: 'test',
+            };
             const id = 1;
-            await controller.updateArticle(
-                { user: { id: userId } } as unknown as Request,
-                dto,
-                id,
-            );
-            expect(articlesService.updateArticle).toHaveBeenCalledWith(userId, id, dto);
+            await controller.updateArticle(user, dto, id);
+            expect(articlesService.updateArticle).toHaveBeenCalledWith(user.id, id, dto);
         });
     });
 
     describe('deleteArticle', () => {
         it('should call deleteOneArticle method of ArticlesService', async () => {
-            const userId = 1;
+            const userId = '1';
             const id = 1;
-            await controller.deleteArticle(
-                { user: { id: userId } } as unknown as Request,
-                id,
-            );
-            expect(articlesService.deleteOneArticle).toHaveBeenCalledWith(userId, id);
+            const user: UsersAccessTokenPayload = {
+                id: userId,
+                username: 'test',
+            };
+            await controller.deleteArticle(user, id);
+            expect(articlesService.deleteOneArticle).toHaveBeenCalledWith(user.id, id);
         });
     });
 });

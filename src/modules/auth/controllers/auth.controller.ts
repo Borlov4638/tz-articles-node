@@ -15,7 +15,7 @@ import { RefreshTokenAuthGuard } from '../guards/refresh-jwt.guard';
 import { UsernameExistGuard } from '../guards/user-exists.guard';
 import { AuthService } from '../services/auth.service';
 import { UserDataWithoutPassword } from '../../../modules/users/types/user-without-pass.type';
-import { User } from 'src/decorators/get-user-from-request.decorator';
+import { User } from '../../../decorators/get-user-from-request.decorator';
 import { UsersRefreshTokenPayload } from '../types/refresh-token-payload.type';
 
 @Controller('auth')

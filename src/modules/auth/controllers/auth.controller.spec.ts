@@ -3,10 +3,12 @@ import { AuthController } from './auth.controller';
 import { UserService } from '../../users/services/user.service';
 import { AuthService } from '../services/auth.service';
 import { UserLoginAndRegistrationDTO } from '../dto/user-registration.dto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { LocalAuthGuard } from '../guards/local-auth-guard.guard';
 import { RefreshTokenAuthGuard } from '../guards/refresh-jwt.guard';
 import { UsernameExistGuard } from '../guards/user-exists.guard';
+import { UserDataWithoutPassword } from '../../../modules/users/types/user-without-pass.type';
+import { UsersRefreshTokenPayload } from '../types/refresh-token-payload.type';
 
 describe('AuthController', () => {
     let controller: AuthController;
@@ -69,7 +71,7 @@ describe('AuthController', () => {
 
     describe('login', () => {
         it('should return access and refresh tokens', async () => {
-            const userId = 1;
+            const userId = '1';
             const username = 'testuser';
             const accessToken = 'access-token';
             const refreshToken = 'refresh-token';
@@ -77,14 +79,19 @@ describe('AuthController', () => {
                 .fn()
                 .mockResolvedValue({ accessToken, refreshToken });
 
-            const req = { user: { id: userId, username } } as unknown as Request;
+            const user = {
+                id: userId,
+                username,
+                createdAt: new Date().toISOString(),
+                email: 'user@user.com',
+            } as UserDataWithoutPassword;
             const res = {
                 cookie: jest.fn(),
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn(),
             } as unknown as Response;
 
-            await controller.loginUser(req, res);
+            await controller.loginUser(user, res);
 
             expect(authService.login).toHaveBeenCalledWith(userId, username);
             expect(res.cookie).toHaveBeenCalledWith('refreshToken', refreshToken, {
@@ -98,7 +105,7 @@ describe('AuthController', () => {
 
     describe('refresh', () => {
         it('should return new access and refresh tokens', async () => {
-            const userId = 1;
+            const userId = '1';
             const username = 'testuser';
             const deviceId = 'device-id';
             const accessToken = 'new-access-token';
@@ -107,19 +114,14 @@ describe('AuthController', () => {
                 .fn()
                 .mockResolvedValue({ accessToken, refreshToken });
 
-            const req = {
-                user: { id: userId, username, deviceId },
-                headers: {
-                    'x-device-id': deviceId,
-                },
-            } as unknown as Request;
+            const user = { id: userId, username, deviceId } as UsersRefreshTokenPayload;
             const res = {
                 cookie: jest.fn(),
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn(),
             } as unknown as Response;
 
-            await controller.refreshToken(req, res);
+            await controller.refreshToken(user, res);
 
             expect(authService.refresh).toHaveBeenCalledWith(userId, username, deviceId);
             expect(res.cookie).toHaveBeenCalledWith('refreshToken', refreshToken, {
@@ -134,9 +136,9 @@ describe('AuthController', () => {
     describe('logout', () => {
         it('should call the logout method of the authService with the correct deviceId', async () => {
             const deviceId = 'device-id';
-            const req = { user: { deviceId } } as unknown as Request;
+            const user = { deviceId } as unknown as UsersRefreshTokenPayload;
 
-            await controller.logout(req);
+            await controller.logout(user);
 
             expect(authService.logout).toHaveBeenCalledWith(deviceId);
         });
