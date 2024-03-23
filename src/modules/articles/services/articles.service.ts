@@ -16,9 +16,9 @@ export class ArticlesService {
 
     async getAllArticles(query: GenericFilter): Promise<AllArticlesViewModel> {
         //check if cache exists
-        const cache: string = await this.redisService.get('ALL_ARTICLES');
+        const cache: AllArticlesViewModel = await this.redisService.get('ALL_ARTICLES');
         if (cache) {
-            return JSON.parse(cache);
+            return cache;
         }
 
         const page = +query.page || 1;
@@ -45,7 +45,7 @@ export class ArticlesService {
                 data: results,
             }));
         // Store in cache for 5 minutes
-        this.redisService.set(`ALL_ARTICLES`, JSON.stringify(response), 300);
+        this.redisService.set(`ALL_ARTICLES`, response, 300);
         return response;
     }
 
@@ -63,9 +63,9 @@ export class ArticlesService {
 
     async getOneArticle(id: number): Promise<ArticleEntity> {
         //check if cache exists
-        const cache: string = await this.redisService.get(`ONE_ARTICLE/${id}`);
+        const cache: ArticleEntity = await this.redisService.get(`ONE_ARTICLE/${id}`);
         if (cache) {
-            return JSON.parse(cache);
+            return cache;
         }
 
         const response = await this.articleRepo
@@ -76,7 +76,7 @@ export class ArticlesService {
                 else return articles[0];
             });
         // Store in cache for 5 minutes
-        this.redisService.set(`ONE_ARTICLE/${id}`, JSON.stringify(response), 300);
+        this.redisService.set(`ONE_ARTICLE/${id}`, response, 300);
         return response;
     }
 

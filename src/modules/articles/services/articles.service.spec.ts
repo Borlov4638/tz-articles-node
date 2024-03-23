@@ -85,7 +85,7 @@ describe('ArticlesService', () => {
             expect(result.meta.totalRecords).toEqual(mockArticles.length);
             expect(redisService.set).toHaveBeenCalledWith(
                 'ALL_ARTICLES',
-                JSON.stringify({
+                {
                     meta: {
                         page: 1,
                         pageSize: 10,
@@ -95,18 +95,16 @@ describe('ArticlesService', () => {
                         sortBy: 'title',
                     },
                     data: mockArticles,
-                }),
+                },
                 300,
             );
         });
 
         it('should return cached data if available', async () => {
-            jest.spyOn(redisService, 'get').mockResolvedValueOnce(
-                JSON.stringify({
-                    data: mockArticles,
-                    meta: { totalRecords: mockArticles.length },
-                }),
-            );
+            jest.spyOn(redisService, 'get').mockResolvedValueOnce({
+                data: mockArticles,
+                meta: { totalRecords: mockArticles.length },
+            });
             jest.spyOn(redisService, 'set');
             jest.spyOn(repository, 'findAndCount');
 
@@ -153,15 +151,13 @@ describe('ArticlesService', () => {
         it('should return article from cache if available', async () => {
             const id = 1;
             const cachedArticle = {
-                id,
+                id: '1',
                 title: 'Cached Article',
                 description: 'Cached Description',
                 author: 'cachedUser',
             };
 
-            jest.spyOn(redisService, 'get').mockResolvedValueOnce(
-                JSON.stringify(cachedArticle),
-            );
+            jest.spyOn(redisService, 'get').mockResolvedValueOnce(cachedArticle);
 
             const article = await service.getOneArticle(id);
 
@@ -190,7 +186,7 @@ describe('ArticlesService', () => {
             expect(repository.find).toHaveBeenCalledWith({ where: { id } });
             expect(redisService.set).toHaveBeenCalledWith(
                 `ONE_ARTICLE/${id}`,
-                JSON.stringify(articleFromDB),
+                articleFromDB,
                 300,
             );
         });
